@@ -1,0 +1,38 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "agentGuidance": false,
+  "globalPassThroughEnv": [
+    "CI",
+    "TESTCONTAINERS",
+    "TEST_DATABASE_ADMIN_URL",
+    "TEST_REDIS_URL",
+    "TEST_MAILPIT_URL",
+    "TEST_SMTP_URL",
+    "TEST_S3_ENDPOINT",
+    "DATABASE_URL",
+    "REDIS_URL",
+    "PLAYWRIGHT_BROWSERS_PATH"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "src/generated/**"],
+      "env": ["VITE_*"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build", "build"]
+    },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "test:integration": {
+      "dependsOn": ["^build"],
+      "cache": false
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

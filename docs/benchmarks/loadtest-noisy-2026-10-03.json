@@ -1,0 +1,80 @@
+{
+  "label": "noisy",
+  "loadAverageAtStart": [
+    28.7,
+    39.3,
+    34.1
+  ],
+  "startedAt": "2026-10-03T00:17:33.699Z",
+  "machine": "darwin arm64, node v26.7.0",
+  "runs": 10000,
+  "stepConcurrencyPerWorker": 16,
+  "envCacheMs": 5000,
+  "throughput": [],
+  "noisy": [
+    {
+      "fairScheduling": false,
+      "tenantABacklogPendingSteps": 4969,
+      "baselineB": {
+        "p50": 33,
+        "p95": 332
+      },
+      "underLoadB": {
+        "p50": 399,
+        "p95": 6431,
+        "max": 7183
+      },
+      "p95Ratio": 19.37,
+      "p50Ratio": 12.09,
+      "loadAverage": "31.2"
+    },
+    {
+      "fairScheduling": true,
+      "tenantABacklogPendingSteps": 4979,
+      "baselineB": {
+        "p50": 11,
+        "p95": 23
+      },
+      "underLoadB": {
+        "p50": 130,
+        "p95": 375,
+        "max": 526
+      },
+      "p95Ratio": 16.3,
+      "p50Ratio": 11.82,
+      "loadAverage": "26.3"
+    },
+    {
+      "fairScheduling": false,
+      "tenantABacklogPendingSteps": 4979,
+      "baselineB": {
+        "p50": 23,
+        "p95": 142
+      },
+      "underLoadB": {
+        "p50": 427,
+        "p95": 1748,
+        "max": 2762
+      },
+      "p95Ratio": 12.31,
+      "p50Ratio": 18.57,
+      "loadAverage": "28.8"
+    },
+    {
+      "fairScheduling": true,
+      "tenantABacklogPendingSteps": 4977,
+      "baselineB": {
+        "p50": 10,
+        "p95": 25
+      },
+      "underLoadB": {
+        "p50": 72,
+        "p95": 248,
+        "max": 325
+      },
+      "p95Ratio": 9.92,
+      "p50Ratio": 7.2,
+      "loadAverage": "25.6"
+    }
+  ]
+}

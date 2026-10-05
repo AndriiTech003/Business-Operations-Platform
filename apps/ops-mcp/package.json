@@ -1,0 +1,29 @@
+{
+  "name": "@bop/ops-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "ops-mcp": "./dist/main.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "node --watch dist/main.js --http",
+    "start": "node dist/main.js --http",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run -c vitest.integration.config.ts"
+  },
+  "dependencies": {
+    "@bop/contracts": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@bop/api": "workspace:*",
+    "@bop/core": "workspace:*",
+    "tsup": "^8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "5.0.3"
+  }
+}

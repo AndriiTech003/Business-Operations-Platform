@@ -1,0 +1,34 @@
+{
+  "label": "after-small",
+  "startedAt": "2026-10-02T23:57:18.465Z",
+  "machine": "darwin arm64, node v26.7.0",
+  "runs": 1000,
+  "stepConcurrencyPerWorker": 16,
+  "envCacheMs": 5000,
+  "throughput": [
+    {
+      "workers": 1,
+      "runs": 1000,
+      "enqueueSeconds": 1.8,
+      "runCreationPerSec": 556,
+      "drainSeconds": 20.3,
+      "stepsPerSec": 148,
+      "runsPerSec": 49,
+      "workerQueries": 34736,
+      "failed": 0,
+      "steps": 3000,
+      "retried": 0,
+      "queueLagMs": {
+        "p50": 6051,
+        "p95": 13586,
+        "p99": 16710
+      },
+      "runDurationMs": {
+        "p50": 17147,
+        "p95": 22546
+      },
+      "queriesPerStep": 11.6
+    }
+  ],
+  "noisy": []
+}

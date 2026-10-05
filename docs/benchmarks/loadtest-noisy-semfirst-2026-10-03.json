@@ -1,0 +1,64 @@
+{
+  "label": "noisy-semfirst",
+  "loadAverageAtStart": [
+    21.4,
+    30.2,
+    31.5
+  ],
+  "startedAt": "2026-10-03T00:22:01.709Z",
+  "machine": "darwin arm64, node v26.7.0",
+  "runs": 10000,
+  "stepConcurrencyPerWorker": 16,
+  "envCacheMs": 5000,
+  "throughput": [],
+  "noisy": [
+    {
+      "fairScheduling": true,
+      "tenantABacklogPendingSteps": 4995,
+      "baselineB": {
+        "p50": 47,
+        "p95": 263
+      },
+      "underLoadB": {
+        "p50": 59,
+        "p95": 153,
+        "max": 439
+      },
+      "p95Ratio": 0.58,
+      "p50Ratio": 1.26,
+      "loadAverage": "30.0"
+    },
+    {
+      "fairScheduling": true,
+      "tenantABacklogPendingSteps": 4993,
+      "baselineB": {
+        "p50": 10,
+        "p95": 38
+      },
+      "underLoadB": {
+        "p50": 39,
+        "p95": 67,
+        "max": 143
+      },
+      "p95Ratio": 1.76,
+      "p50Ratio": 3.9,
+      "loadAverage": "23.1"
+    },
+    {
+      "fairScheduling": false,
+      "tenantABacklogPendingSteps": 4974,
+      "baselineB": {
+        "p50": 5,
+        "p95": 10
+      },
+      "underLoadB": {
+        "p50": 166,
+        "p95": 3360,
+        "max": 4269
+      },
+      "p95Ratio": 336,
+      "p50Ratio": 33.2,
+      "loadAverage": "16.3"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@bop/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "node --watch --enable-source-maps dist/main.js",
+    "start": "node --enable-source-maps dist/main.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bop/core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "6.0.3"
+  }
+}

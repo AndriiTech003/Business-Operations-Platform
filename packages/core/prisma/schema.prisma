@@ -1,0 +1,630 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  runtime             = "nodejs"
+  importFileExtension = ""
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  owner
+  admin
+  manager
+  member
+  viewer
+}
+
+enum ContactStatus {
+  lead
+  active
+  customer
+  churned
+}
+
+enum StageKind {
+  open
+  won
+  lost
+}
+
+enum InvoiceStatus {
+  draft
+  sent
+  partially_paid
+  paid
+  overdue
+  void
+}
+
+enum TaskStatus {
+  open
+  in_progress
+  done
+  cancelled
+}
+
+model Tenant {
+  id        String   @id @default(uuid()) @db.Uuid
+  slug      String   @unique
+  name      String
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  name         String
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  tokenHash String   @unique @map("token_hash")
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Membership {
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  role      Role
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@id([tenantId, userId])
+  @@index([userId])
+  @@map("memberships")
+}
+
+model Company {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  name      String
+  domain    String?
+  industry  String?
+  size      Int?
+  ownerId   String?   @map("owner_id") @db.Uuid
+  custom    Json      @default("{}")
+  tags      String[]  @default([])
+  source    String?
+  version   Int       @default(1)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  @@index([tenantId, name])
+  @@index([tenantId, domain])
+  @@map("companies")
+}
+
+model Contact {
+  id              String        @id @default(uuid()) @db.Uuid
+  tenantId        String        @map("tenant_id") @db.Uuid
+  companyId       String?       @map("company_id") @db.Uuid
+  firstName       String        @map("first_name")
+  lastName        String        @map("last_name")
+  email           String?
+  phone           String?
+  title           String?
+  ownerId         String?       @map("owner_id") @db.Uuid
+  custom          Json          @default("{}")
+  tags            String[]      @default([])
+  lastContactedAt DateTime?     @map("last_contacted_at") @db.Timestamptz(3)
+  status          ContactStatus @default(lead)
+  source          String?
+  version         Int           @default(1)
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(3)
+
+  @@unique([tenantId, email])
+  @@index([tenantId, companyId])
+  @@index([tenantId, lastName])
+  @@map("contacts")
+}
+
+model Pipeline {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  name      String
+  isDefault Boolean  @default(false) @map("is_default")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId])
+  @@map("pipelines")
+}
+
+model Stage {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  pipelineId  String    @map("pipeline_id") @db.Uuid
+  name        String
+  position    Int
+  probability Int
+  kind        StageKind @default(open)
+
+  @@index([tenantId, pipelineId])
+  @@map("stages")
+}
+
+model Deal {
+  id              String    @id @default(uuid()) @db.Uuid
+  tenantId        String    @map("tenant_id") @db.Uuid
+  pipelineId      String    @map("pipeline_id") @db.Uuid
+  stageId         String    @map("stage_id") @db.Uuid
+  companyId       String?   @map("company_id") @db.Uuid
+  contactId       String?   @map("contact_id") @db.Uuid
+  title           String
+  amountCents     BigInt    @default(0) @map("amount_cents")
+  currency        String    @default("USD")
+  expectedCloseAt DateTime? @map("expected_close_at") @db.Timestamptz(3)
+  ownerId         String?   @map("owner_id") @db.Uuid
+  position        Float
+  custom          Json      @default("{}")
+  tags            String[]  @default([])
+  stageChangedAt  DateTime  @default(now()) @map("stage_changed_at") @db.Timestamptz(3)
+  lastActivityAt  DateTime  @default(now()) @map("last_activity_at") @db.Timestamptz(3)
+  closedAt        DateTime? @map("closed_at") @db.Timestamptz(3)
+  lostReason      String?   @map("lost_reason")
+  version         Int       @default(1)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  @@index([tenantId, stageId, position])
+  @@index([tenantId, companyId])
+  @@map("deals")
+}
+
+model Invoice {
+  id            String        @id @default(uuid()) @db.Uuid
+  tenantId      String        @map("tenant_id") @db.Uuid
+  number        String
+  companyId     String        @map("company_id") @db.Uuid
+  contactId     String?       @map("contact_id") @db.Uuid
+  dealId        String?       @map("deal_id") @db.Uuid
+  status        InvoiceStatus @default(draft)
+  currency      String        @default("USD")
+  issueDate     DateTime      @map("issue_date") @db.Timestamptz(3)
+  dueDate       DateTime      @map("due_date") @db.Timestamptz(3)
+  subtotalCents BigInt        @default(0) @map("subtotal_cents")
+  taxCents      BigInt        @default(0) @map("tax_cents")
+  totalCents    BigInt        @default(0) @map("total_cents")
+  paidCents     BigInt        @default(0) @map("paid_cents")
+  notes         String?
+  publicToken   String        @unique @map("public_token")
+  pdfKey        String?       @map("pdf_key")
+  pdfVersion    Int?          @map("pdf_version")
+  sentAt        DateTime?     @map("sent_at") @db.Timestamptz(3)
+  paidAt        DateTime?     @map("paid_at") @db.Timestamptz(3)
+  voidedAt      DateTime?     @map("voided_at") @db.Timestamptz(3)
+  createdByType String        @default("user") @map("created_by_type")
+  version       Int           @default(1)
+  createdAt     DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([tenantId, number])
+  @@index([tenantId, status, dueDate])
+  @@index([tenantId, companyId])
+  @@map("invoices")
+}
+
+model InvoiceLine {
+  id             String  @id @default(uuid()) @db.Uuid
+  tenantId       String  @map("tenant_id") @db.Uuid
+  invoiceId      String  @map("invoice_id") @db.Uuid
+  position       Int     @default(0)
+  description    String
+  quantity       Decimal @db.Decimal(12, 3)
+  unitPriceCents BigInt  @map("unit_price_cents")
+  taxRate        Decimal @default(0) @map("tax_rate") @db.Decimal(6, 3)
+
+  @@index([tenantId, invoiceId])
+  @@map("invoice_lines")
+}
+
+model Payment {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  invoiceId   String   @map("invoice_id") @db.Uuid
+  amountCents BigInt   @map("amount_cents")
+  method      String
+  paidAt      DateTime @map("paid_at") @db.Timestamptz(3)
+  reference   String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, invoiceId])
+  @@map("payments")
+}
+
+model Task {
+  id             String     @id @default(uuid()) @db.Uuid
+  tenantId       String     @map("tenant_id") @db.Uuid
+  title          String
+  description    String?
+  assigneeId     String?    @map("assignee_id") @db.Uuid
+  dueAt          DateTime?  @map("due_at") @db.Timestamptz(3)
+  status         TaskStatus @default(open)
+  priority       Int        @default(2)
+  relatedType    String?    @map("related_type")
+  relatedId      String?    @map("related_id") @db.Uuid
+  createdByType  String     @default("user") @map("created_by_type")
+  createdById    String?    @map("created_by_id")
+  idempotencyKey String?    @unique @map("idempotency_key")
+  remindedAt     DateTime?  @map("reminded_at") @db.Timestamptz(3)
+  completedAt    DateTime?  @map("completed_at") @db.Timestamptz(3)
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([tenantId, assigneeId, status])
+  @@index([tenantId, relatedType, relatedId])
+  @@map("tasks")
+}
+
+model Activity {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  subjectType String   @map("subject_type")
+  subjectId   String   @map("subject_id") @db.Uuid
+  kind        String
+  actorType   String   @map("actor_type")
+  actorId     String?  @map("actor_id")
+  data        Json     @default("{}")
+  sourceKey   String?  @unique @map("source_key")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, subjectType, subjectId, createdAt])
+  @@index([tenantId, actorId, createdAt])
+  @@map("activities")
+}
+
+model Comment {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  subjectType String   @map("subject_type")
+  subjectId   String   @map("subject_id") @db.Uuid
+  authorId    String   @map("author_id") @db.Uuid
+  body        String
+  mentions    String[] @default([])
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, subjectType, subjectId, createdAt])
+  @@map("comments")
+}
+
+model Notification {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  kind      String
+  payload   Json      @default("{}")
+  sourceKey String?   @unique @map("source_key")
+  readAt    DateTime? @map("read_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, userId, createdAt])
+  @@map("notifications")
+}
+
+model CustomFieldDef {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  entity    String
+  key       String
+  label     String
+  type      String
+  options   Json?
+  required  Boolean  @default(false)
+  indexed   Boolean  @default(false)
+  indexName String?  @map("index_name")
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([tenantId, entity, key])
+  @@map("custom_field_defs")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  actorType String   @map("actor_type")
+  actorId   String?  @map("actor_id")
+  action    String
+  entity    String
+  entityId  String   @map("entity_id")
+  diff      Json     @default("{}")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, entity, entityId, createdAt])
+  @@index([tenantId, createdAt])
+  @@map("audit_logs")
+}
+
+model ApiToken {
+  id         String    @id @default(uuid()) @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  name       String
+  prefix     String
+  tokenHash  String    @unique @map("token_hash")
+  scopes     String[]
+  actorType  String    @default("user") @map("actor_type")
+  expiresAt  DateTime? @map("expires_at") @db.Timestamptz(3)
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(3)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(3)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, userId])
+  @@map("api_tokens")
+}
+
+model Outbox {
+  id          String    @id @default(uuid()) @db.Uuid
+  tenantId    String    @map("tenant_id") @db.Uuid
+  type        String
+  payload     Json
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  publishedAt DateTime? @map("published_at") @db.Timestamptz(3)
+
+  @@index([publishedAt, createdAt])
+  @@map("outbox")
+}
+
+model EmailTemplate {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  key       String
+  name      String
+  subject   String
+  body      String
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([tenantId, key])
+  @@map("email_templates")
+}
+
+model EmailMessage {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  status         String    @default("queued")
+  toAddresses    String[]  @map("to_addresses")
+  ccAddresses    String[]  @default([]) @map("cc_addresses")
+  subject        String
+  html           String
+  text           String?
+  relatedType    String?   @map("related_type")
+  relatedId      String?   @map("related_id") @db.Uuid
+  attachInvoice  String?   @map("attach_invoice") @db.Uuid
+  idempotencyKey String?   @unique @map("idempotency_key")
+  actorType      String    @default("user") @map("actor_type")
+  actorId        String?   @map("actor_id")
+  attempts       Int       @default(0)
+  leaseUntil     DateTime? @map("lease_until") @db.Timestamptz(3)
+  messageId      String?   @map("message_id")
+  error          String?
+  sentAt         DateTime? @map("sent_at") @db.Timestamptz(3)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([status, createdAt])
+  @@index([tenantId, relatedType, relatedId])
+  @@map("email_messages")
+}
+
+model Secret {
+  id         String   @id @default(uuid()) @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  name       String
+  ciphertext String
+  createdBy  String?  @map("created_by") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([tenantId, name])
+  @@map("secrets")
+}
+
+model ImportJob {
+  id         String    @id @default(uuid()) @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  entity     String
+  status     String    @default("queued")
+  fileName   String    @map("file_name")
+  csv        String
+  mapping    Json      @default("{}")
+  mode       String    @default("merge")
+  total      Int       @default(0)
+  processed  Int       @default(0)
+  created    Int       @default(0)
+  updated    Int       @default(0)
+  failed     Int       @default(0)
+  errors     Json      @default("[]")
+  createdBy  String?   @map("created_by") @db.Uuid
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  finishedAt DateTime? @map("finished_at") @db.Timestamptz(3)
+
+  @@index([tenantId, createdAt])
+  @@map("import_jobs")
+}
+
+model SearchDocument {
+  tenantId  String   @map("tenant_id") @db.Uuid
+  entity    String
+  entityId  String   @map("entity_id") @db.Uuid
+  title     String
+  subtitle  String?
+  body      String   @default("")
+  external  Boolean  @default(false)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(3)
+
+  @@id([tenantId, entity, entityId])
+  @@map("search_documents")
+}
+
+model IdempotencyRecord {
+  tenantId    String   @map("tenant_id") @db.Uuid
+  key         String
+  scope       String
+  requestHash String   @map("request_hash")
+  statusCode  Int      @map("status_code")
+  response    Json
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@id([tenantId, scope, key])
+  @@map("idempotency_records")
+}
+
+model Workflow {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String    @map("tenant_id") @db.Uuid
+  name          String
+  description   String?
+  status        String    @default("draft")
+  activeVersion Int?      @map("active_version")
+  triggerType   String?   @map("trigger_type")
+  triggerKey    String?   @map("trigger_key")
+  webhookSecret String    @map("webhook_secret")
+  templateKey   String?   @map("template_key")
+  createdBy     String?   @map("created_by") @db.Uuid
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  nextFireAt    DateTime? @map("next_fire_at") @db.Timestamptz(3)
+  lastScanAt    DateTime? @map("last_scan_at") @db.Timestamptz(3)
+  runCounter    Int       @default(0) @map("run_counter")
+
+  @@index([tenantId, status, triggerType, triggerKey])
+  @@index([status, triggerType, nextFireAt])
+  @@map("workflows")
+}
+
+model WorkflowVersion {
+  tenantId    String   @map("tenant_id") @db.Uuid
+  workflowId  String   @map("workflow_id") @db.Uuid
+  version     Int
+  definition  Json
+  checksum    String
+  publishedBy String?  @map("published_by") @db.Uuid
+  publishedAt DateTime @default(now()) @map("published_at") @db.Timestamptz(3)
+
+  @@id([workflowId, version])
+  @@map("workflow_versions")
+}
+
+model WorkflowDraft {
+  tenantId   String    @map("tenant_id") @db.Uuid
+  workflowId String    @id @map("workflow_id") @db.Uuid
+  definition Json
+  updatedBy  String?   @map("updated_by") @db.Uuid
+  updatedAt  DateTime? @map("updated_at") @db.Timestamptz(3)
+
+  @@map("workflow_drafts")
+}
+
+model WorkflowRun {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  workflowId     String    @map("workflow_id") @db.Uuid
+  version        Int
+  status         String
+  triggerType    String    @map("trigger_type")
+  triggerPayload Json      @map("trigger_payload")
+  context        Json      @default("{}")
+  dedupeKey      String?   @map("dedupe_key")
+  causation      Json      @default("[]")
+  isTest         Boolean   @default(false) @map("is_test")
+  testDefinition Json?     @map("test_definition")
+  number         Int       @default(0)
+  stepCount      Int       @default(0) @map("step_count")
+  lockVersion    Int       @default(0) @map("lock_version")
+  startedAt      DateTime  @default(now()) @map("started_at") @db.Timestamptz(3)
+  finishedAt     DateTime? @map("finished_at") @db.Timestamptz(3)
+  error          Json?
+
+  @@unique([workflowId, dedupeKey])
+  @@index([tenantId, workflowId, startedAt])
+  @@index([tenantId, status])
+  @@map("workflow_runs")
+}
+
+model StepRun {
+  id             String    @id @default(uuid()) @db.Uuid
+  runId          String    @map("run_id") @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  nodeId         String    @map("node_id")
+  nodeType       String    @map("node_type")
+  iteration      Int       @default(0)
+  status         String
+  attempt        Int       @default(0)
+  maxAttempts    Int       @default(3) @map("max_attempts")
+  input          Json?
+  output         Json?
+  outcome        String?
+  error          Json?
+  attempts       Json      @default("[]")
+  idempotencyKey String    @map("idempotency_key")
+  leaseOwner     String?   @map("lease_owner")
+  leaseExpiresAt DateTime? @map("lease_expires_at") @db.Timestamptz(3)
+  scheduledFor   DateTime? @map("scheduled_for") @db.Timestamptz(3)
+  pendingSince   DateTime? @map("pending_since") @db.Timestamptz(3)
+  wait           Json?
+  waitKey        String?   @map("wait_key")
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  startedAt      DateTime? @map("started_at") @db.Timestamptz(3)
+  finishedAt     DateTime? @map("finished_at") @db.Timestamptz(3)
+
+  @@unique([runId, nodeId, iteration])
+  @@index([runId])
+  @@index([waitKey])
+  @@map("step_runs")
+}
+
+model Approval {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @map("tenant_id") @db.Uuid
+  source         String
+  sourceRef      Json      @default("{}") @map("source_ref")
+  title          String
+  details        Json      @default("{}")
+  assigneeIds    String[]  @default([]) @map("assignee_ids") @db.Uuid
+  status         String    @default("pending")
+  expiresAt      DateTime? @map("expires_at") @db.Timestamptz(3)
+  callbackUrl    String?   @map("callback_url")
+  callbackAt     DateTime? @map("callback_at") @db.Timestamptz(3)
+  requestedBy    String?   @map("requested_by")
+  idempotencyKey String?   @unique @map("idempotency_key")
+  decidedBy      String?   @map("decided_by") @db.Uuid
+  decidedAt      DateTime? @map("decided_at") @db.Timestamptz(3)
+  comment        String?
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@index([tenantId, status, createdAt])
+  @@map("approvals")
+}
+
+model EffectLog {
+  idempotencyKey String   @map("idempotency_key")
+  tenantId       String   @map("tenant_id") @db.Uuid
+  origin         String   @default("engine")
+  effect         String
+  requestHash    String?  @map("request_hash")
+  result         Json
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@id([tenantId, origin, idempotencyKey])
+  @@index([idempotencyKey], map: "effect_log_key_idx")
+  @@map("effect_log")
+}

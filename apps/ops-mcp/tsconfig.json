@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "types": ["node"],
+    "lib": ["ES2023", "DOM"],
+    "experimentalDecorators": true
+  },
+  "include": ["src", "test"]
+}

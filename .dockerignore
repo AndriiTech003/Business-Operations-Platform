@@ -1,0 +1,9 @@
+**/node_modules
+**/dist
+**/.turbo
+**/coverage
+.smoke
+.loadtest
+playwright-report
+test-results
+.env

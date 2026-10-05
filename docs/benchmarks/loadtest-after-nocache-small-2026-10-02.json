@@ -1,0 +1,34 @@
+{
+  "label": "after-nocache-small",
+  "startedAt": "2026-10-02T23:58:05.206Z",
+  "machine": "darwin arm64, node v26.7.0",
+  "runs": 1000,
+  "stepConcurrencyPerWorker": 16,
+  "envCacheMs": 0,
+  "throughput": [
+    {
+      "workers": 1,
+      "runs": 1000,
+      "enqueueSeconds": 5.6,
+      "runCreationPerSec": 180,
+      "drainSeconds": 25.8,
+      "stepsPerSec": 116,
+      "runsPerSec": 39,
+      "workerQueries": 43743,
+      "failed": 0,
+      "steps": 3000,
+      "retried": 0,
+      "queueLagMs": {
+        "p50": 8662,
+        "p95": 15370,
+        "p99": 21127
+      },
+      "runDurationMs": {
+        "p50": 22701,
+        "p95": 29188
+      },
+      "queriesPerStep": 14.6
+    }
+  ],
+  "noisy": []
+}

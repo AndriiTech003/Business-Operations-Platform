@@ -1,0 +1,114 @@
+{
+  "label": "final",
+  "loadAverageAtStart": [
+    19.4,
+    19.5,
+    19.7
+  ],
+  "startedAt": "2026-10-02T23:59:05.690Z",
+  "machine": "darwin arm64, node v26.7.0",
+  "runs": 10000,
+  "stepConcurrencyPerWorker": 16,
+  "envCacheMs": 5000,
+  "throughput": [
+    {
+      "workers": 1,
+      "runs": 10000,
+      "enqueueSeconds": 38.2,
+      "runCreationPerSec": 262,
+      "drainSeconds": 431.9,
+      "stepsPerSec": 69,
+      "runsPerSec": 23,
+      "workerQueries": 349289,
+      "failed": 0,
+      "steps": 30000,
+      "retried": 0,
+      "queueLagMs": {
+        "p50": 37833,
+        "p95": 405764,
+        "p99": 419385
+      },
+      "runDurationMs": {
+        "p50": 384765,
+        "p95": 448380
+      },
+      "queriesPerStep": 11.6
+    },
+    {
+      "workers": 2,
+      "runs": 10000,
+      "enqueueSeconds": 27.5,
+      "runCreationPerSec": 363,
+      "drainSeconds": 152.5,
+      "stepsPerSec": 197,
+      "runsPerSec": 66,
+      "workerQueries": 348532,
+      "failed": 0,
+      "steps": 30000,
+      "retried": 0,
+      "queueLagMs": {
+        "p50": 37472,
+        "p95": 122128,
+        "p99": 131947
+      },
+      "runDurationMs": {
+        "p50": 133030,
+        "p95": 166453
+      },
+      "queriesPerStep": 11.6
+    },
+    {
+      "workers": 4,
+      "runs": 10000,
+      "enqueueSeconds": 28.5,
+      "runCreationPerSec": 350,
+      "drainSeconds": 233.4,
+      "stepsPerSec": 129,
+      "runsPerSec": 43,
+      "workerQueries": 352798,
+      "failed": 0,
+      "steps": 30000,
+      "retried": 0,
+      "queueLagMs": {
+        "p50": 38861,
+        "p95": 167563,
+        "p99": 202262
+      },
+      "runDurationMs": {
+        "p50": 153010,
+        "p95": 238079
+      },
+      "queriesPerStep": 11.8
+    }
+  ],
+  "noisy": [
+    {
+      "fairScheduling": false,
+      "tenantABacklogPendingSteps": 4978,
+      "baselineB": {
+        "p50": 17,
+        "p95": 40
+      },
+      "underLoadB": {
+        "p50": 184,
+        "p95": 1680,
+        "max": 1891
+      },
+      "p95Ratio": 42
+    },
+    {
+      "fairScheduling": true,
+      "tenantABacklogPendingSteps": 4989,
+      "baselineB": {
+        "p50": 499,
+        "p95": 1541
+      },
+      "underLoadB": {
+        "p50": 372,
+        "p95": 1005,
+        "max": 1203
+      },
+      "p95Ratio": 0.65
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "label": "gapfix",
+  "loadAverageAtStart": [
+    4.8,
+    8.4,
+    11.7
+  ],
+  "startedAt": "2026-10-04T23:24:36.883Z",
+  "machine": "darwin arm64, node v26.7.0",
+  "runs": 10000,
+  "stepConcurrencyPerWorker": 16,
+  "envCacheMs": 5000,
+  "throughput": [],
+  "noisy": [
+    {
+      "fairScheduling": false,
+      "creation": "concurrent",
+      "refusedWith429": 0,
+      "tenantABacklogPendingSteps": 317,
+      "baselineB": {
+        "p50": 10,
+        "p95": 15
+      },
+      "underLoadB": {
+        "p50": 4,
+        "p95": 6,
+        "max": 12
+      },
+      "p95Ratio": 0.4,
+      "p50Ratio": 0.4,
+      "loadAverage": "3.7"
+    },
+    {
+      "fairScheduling": true,
+      "creation": "concurrent",
+      "refusedWith429": 0,
+      "tenantABacklogPendingSteps": 84,
+      "baselineB": {
+        "p50": 12,
+        "p95": 16
+      },
+      "underLoadB": {
+        "p50": 5,
+        "p95": 10,
+        "max": 10
+      },
+      "p95Ratio": 0.63,
+      "p50Ratio": 0.42,
+      "loadAverage": "3.9"
+    },
+    {
+      "fairScheduling": false,
+      "creation": "prequeued",
+      "refusedWith429": 0,
+      "tenantABacklogPendingSteps": 4874,
+      "baselineB": {
+        "p50": 8,
+        "p95": 18
+      },
+      "underLoadB": {
+        "p50": 20,
+        "p95": 43,
+        "max": 53
+      },
+      "p95Ratio": 2.39,
+      "p50Ratio": 2.5,
+      "loadAverage": "6.6"
+    },
+    {
+      "fairScheduling": true,
+      "creation": "prequeued",
+      "refusedWith429": 0,
+      "tenantABacklogPendingSteps": 4964,
+      "baselineB": {
+        "p50": 8,
+        "p95": 12
+      },
+      "underLoadB": {
+        "p50": 20,
+        "p95": 42,
+        "max": 51
+      },
+      "p95Ratio": 3.5,
+      "p50Ratio": 2.5,
+      "loadAverage": "6.8"
+    }
+  ]
+}

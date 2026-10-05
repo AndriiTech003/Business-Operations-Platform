@@ -1,0 +1,15 @@
+node_modules
+dist
+.turbo
+coverage
+*.tgz
+!vendor/*.tgz
+.env
+.env.local
+test-results
+playwright-report
+.smoke
+.dev
+.run
+.e2e
+*.tsbuildinfo

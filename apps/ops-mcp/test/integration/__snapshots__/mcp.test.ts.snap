@@ -1,0 +1,310 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ops-mcp contract (Streamable HTTP) > lists the tools with risk annotations (snapshot) 1`] = `
+[
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "query",
+      "types",
+    ],
+    "name": "search_records",
+    "required": [
+      "query",
+    ],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "id",
+    ],
+    "name": "get_company",
+    "required": [
+      "id",
+    ],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "id",
+    ],
+    "name": "get_contact",
+    "required": [
+      "id",
+    ],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "id",
+    ],
+    "name": "get_deal",
+    "required": [
+      "id",
+    ],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "id",
+    ],
+    "name": "get_invoice",
+    "required": [
+      "id",
+    ],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "cursor",
+      "custom",
+      "lastContactedBefore",
+      "limit",
+      "ownerId",
+      "query",
+      "status",
+      "tags",
+    ],
+    "name": "list_contacts",
+    "required": [],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "amountMaxCents",
+      "amountMinCents",
+      "cursor",
+      "limit",
+      "open",
+      "ownerId",
+      "stage",
+      "stageChangedBefore",
+    ],
+    "name": "list_deals",
+    "required": [],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "amountMaxCents",
+      "amountMinCents",
+      "cursor",
+      "dueBefore",
+      "limit",
+      "overdueDays",
+      "status",
+    ],
+    "name": "list_invoices",
+    "required": [],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "inputs": [
+      "name",
+      "params",
+    ],
+    "name": "get_report",
+    "required": [
+      "name",
+    ],
+    "risk": "read",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "assigneeId",
+      "description",
+      "dryRun",
+      "dueAt",
+      "idempotencyKey",
+      "priority",
+      "relatedId",
+      "relatedType",
+      "title",
+    ],
+    "name": "create_task",
+    "required": [
+      "title",
+    ],
+    "risk": "write_reversible",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "body",
+      "dryRun",
+      "idempotencyKey",
+      "kind",
+      "subject",
+    ],
+    "name": "add_note",
+    "required": [
+      "subject",
+      "body",
+    ],
+    "risk": "write_reversible",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "dryRun",
+      "id",
+      "idempotencyKey",
+      "patch",
+    ],
+    "name": "update_deal",
+    "required": [
+      "id",
+      "patch",
+    ],
+    "risk": "write_reversible",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "body",
+      "dryRun",
+      "idempotencyKey",
+      "relatedTo",
+      "subject",
+      "to",
+    ],
+    "name": "draft_email",
+    "required": [
+      "to",
+      "subject",
+      "body",
+    ],
+    "risk": "write_reversible",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "draftId",
+      "dryRun",
+      "idempotencyKey",
+    ],
+    "name": "send_email",
+    "required": [
+      "draftId",
+    ],
+    "risk": "external",
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": true,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "dryRun",
+      "id",
+      "idempotencyKey",
+      "to",
+    ],
+    "name": "send_invoice",
+    "required": [
+      "id",
+    ],
+    "risk": "external",
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+    },
+    "inputs": [
+      "dryRun",
+      "id",
+      "idempotencyKey",
+      "reason",
+    ],
+    "name": "void_invoice",
+    "required": [
+      "id",
+    ],
+    "risk": "irreversible",
+  },
+]
+`;

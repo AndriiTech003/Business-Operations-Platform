@@ -1,0 +1,69 @@
+{
+  "name": "@ashamrai/expr",
+  "version": "0.1.0",
+  "description": "A small, safe, typed expression language: Pratt parser, type checker, evaluator, templates and SQL compilation",
+  "license": "MIT",
+  "author": "Andrii Shamrai",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "expression-language",
+    "pratt-parser",
+    "type-checker",
+    "workflow",
+    "sandbox"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run -c vitest.integration.config.ts",
+    "publint": "publint --strict",
+    "attw": "attw --pack . --profile node16",
+    "size": "size-limit"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@size-limit/preset-small-lib": "^14.1.0",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
+    "fast-check": "^4.10.2",
+    "pg": "^8.23.1",
+    "publint": "^0.3.25",
+    "size-limit": "^14.1.0",
+    "tsup": "^8.5.1",
+    "typescript": "6.0.3",
+    "vitest": "5.0.3"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "20 KB"
+    }
+  ]
+}
